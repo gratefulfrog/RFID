@@ -1,20 +1,6 @@
-#include <time.h>
-#include "lib_rfid_driver.h"
+#include "little_test.h"
 
-#ifdef TEST
-#define INPUT (1)
-void wiringPiSetup (){
-}
-void pinMode(int x, int y){
-}
-int digitalRead(int x){
-  return 0;
-}
-#else
-#include <wiringPi.h>
-#endif
-
-
+#define TEST
 
 void printBytes(unsigned char *bytes){
   for (int i=0;i<50;i++){
@@ -29,7 +15,18 @@ void   printBytesN(unsigned char *bytes, int nbBytes){
   }
   printf("\n");
 }
-  
+
+#ifdef TEST
+#define INPUT (1)
+void wiringPiSetup (){
+}
+void pinMode(int x, int y){
+}
+int digitalRead(int x){
+  return 0;
+}
+#endif
+
 int main(){
   int result, nbBytes;
   int len;
@@ -92,9 +89,7 @@ int main(){
       sleep(0.5);
     }
   }
-
-  
-  close(uhf_uart_fd);
-	
+  close(uhf_uart_fd);	
   return 0;
 }
+

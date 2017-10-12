@@ -1,27 +1,23 @@
-# This is the makefile for test.c
+# This is the makefile for little_test.c
 # it uses:
-## g++ as the compiler
+## cc as the compiler
 ## automatic dependency generation (-include $(OBJ:.o=.d) and -MD flag
 #  -lwiringPi to include the RPI wiring libraries, only available on RPI 
-#
-# use target: all to build applicatin
-# use target: test to build csv writer test, and uncomment -include line at end
-# 
+
+## leave this for off rpi testing
+TEST=-DTEST
+## use this for on RPI
+#TEST=-lwiringPi
 
 CC=cc
-CFLAGS=-MD
+CFLAGS=-MD $(TEST)
 CTESTFLAGS=-MD
-
 OBJ = lib_rfid_driver.o little_test.o
-
 
 all: run
 
-
 run: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
-
-
 
 %.o: %.c 
 	$(CC) -c -o $@ $< $(CFLAGS)
