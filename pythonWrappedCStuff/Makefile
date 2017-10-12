@@ -1,41 +1,31 @@
-# This is the makefile for test.c
-# it uses:
-## g++ as the compiler
-## automatic dependency generation (-include $(OBJ:.o=.d) and -MD flag
-#  -lwiringPi to include the RPI wiring libraries, only available on RPI 
-#
-# use target: all to build applicatin
-# use target: test to build csv writer test, and uncomment -include line at end
-# 
-
+#DEFS=-DTEST -DMAIN
+DEFS=-DTEST
 CC=cc
-#CFLAGS=-fPIC -MD
-CFLAGS=-MD
-MAKE_MAIN=-DMAIN
-LIBCFLAGS=$(CFLAGS) -shared	
-
-OBJ =  lib_rfid_driver.o  little_test.o
-#common_uart.o
+CFLAGS=-fPIC -MD
+LIBFLAGS=-shared -MD
+OBJ=little_test.o lib_rfid_driver.o common_uart.o
 
 all: run
 
-run: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(MAKE_MAIN)
-
 lib: lib.so
 
+run: $(OBJ)
+	$(CC) -o $@ $? $(CFLAGS) $(DEFS)	
+
 lib.so: $(OBJ)
-	$(CC) -o $@ $< $(LIBCFLAGS)
+	$(CC) -o $@ $? $(LIBFLAGS)
 
 %.o: %.c 
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DEFS)
 
 .PHONY: clean
 
 clean:
 	rm -f *.o
 	rm -f *.d
-	rm -f run
+	rm -f *.so
+	rm -f a.out run
 
 -include $(OBJ:.o=.d)
+
 

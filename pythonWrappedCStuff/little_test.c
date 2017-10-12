@@ -1,6 +1,17 @@
 #include "little_test.h"
 
-#define TEST
+#ifdef TEST
+#define INPUT (1)
+void wiringPiSetup (){
+}
+void pinMode(int x, int y){
+}
+int digitalRead(int x){
+  return 0;
+}
+#else
+#include <wiringPi.h>
+#endif
 
 void printBytes(unsigned char *bytes){
   for (int i=0;i<50;i++){
@@ -16,17 +27,90 @@ void   printBytesN(unsigned char *bytes, int nbBytes){
   printf("\n");
 }
 
-#ifdef TEST
-#define INPUT (1)
-void wiringPiSetup (){
+int openPort(){
+  int uhf_uart_fd = uart_open(PORT, 115200, 8, 1, 'N', 0);
+  if(uhf_uart_fd == -1)	{
+    printf("connect error result = %d\n", uhf_uart_fd);
+  }
+  else{
+    printf("connect success!\n");
+  }
+  return uhf_uart_fd;
 }
-void pinMode(int x, int y){
-}
-int digitalRead(int x){
-  return 0;
-}
-#endif
 
+void showFWVersion(){
+  int nbBytes;
+  unsigned char uart_data[500];
+
+  printf("Version Fw: ");
+  nbBytes = GetUm7Fw(uart_data);
+  printBytesN(uart_data,nbBytes);
+}
+
+void showHWVersion(){
+  int nbBytes;
+  unsigned char uart_data[500];
+
+  printf("Version Hw: ");
+  nbBytes = GetUm7Hw(uart_data);
+  printBytesN(uart_data,nbBytes);
+}
+
+void showTxPower(){
+  int nbBytes;
+  unsigned char uart_data[500];
+
+  printf("TxPower: ");
+  nbBytes = GetTxPower(uart_data);
+  printBytesN(uart_data,nbBytes);
+}
+
+void showReaderID(){
+  int nbBytes;
+  unsigned char uart_data[500];
+
+  printf("Reader ID: ");
+  nbBytes = readerID(uart_data);
+  printBytesN(uart_data,nbBytes);
+}
+
+void showRSSI(){
+  int nbBytes;
+  unsigned char uart_data[500];
+
+  printf("RSSI: ");
+  nbBytes = GetUm7Rssi(uart_data);
+  printBytesN(uart_data,nbBytes);
+}
+
+void showTemp(){
+  unsigned char uart_data[500];
+
+  float temp =0.0;
+  readerTemp(uart_data,&temp);
+  printf("Temperature : %f\n",temp);
+}  
+
+int showReadMore(){
+  int nbBytes;
+  unsigned char uart_data[500];
+  nbBytes  = readmore(uart_data);
+  if(nbBytes){
+    printf("Tag: ");
+    printBytesN(uart_data,nbBytes);
+    printf("\n");
+  }
+  return nbBytes;
+}
+void doStopReadMore(){
+  unsigned char uart_data[500];
+  stopReadmore(uart_data);
+}
+void shutDown(int fd){
+  close(fd);
+}
+
+#ifdef MAIN
 int main(){
   int result, nbBytes;
   int len;
@@ -62,6 +146,7 @@ int main(){
   nbBytes = readerID(uart_data);
   printBytesN(uart_data,nbBytes);
   sleep(0.5);
+
   
   printf("RSSI: ");
   nbBytes = GetUm7Rssi(uart_data);
@@ -89,7 +174,8 @@ int main(){
       sleep(0.5);
     }
   }
+
   close(uhf_uart_fd);	
   return 0;
 }
-
+#endif

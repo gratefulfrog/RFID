@@ -5,5 +5,6 @@
 #include <stdlib.h>
 
 extern void printInt(int);
+extern int returnIntPlusOne(int);
 
 #endif 

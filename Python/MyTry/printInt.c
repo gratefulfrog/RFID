@@ -7,10 +7,15 @@ void printInt(int num){
 
 }
 
+int returnIntPlusOne(int x){
+  return x + 1;
+}
+
 #if MAIN
 int main(int argc,char **argv){
   if (argc == 2){
     printInt(atoi(argv[1]));
+    printInt(returnIntPlusOne(atoi(argv[1])));
   }
   else{
     printf("usage : $ ./a.out <int>\n");

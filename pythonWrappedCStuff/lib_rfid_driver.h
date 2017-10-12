@@ -10,9 +10,9 @@
 
 int bytes2HexString(char *src, char *des, int size);
 
-int receive_serial_bytes(UINT8 *pszBuffer, int iLength, int uart_fd);
+int receive_serial_bytes(unsigned char *pszBuffer, int iLength, int uart_fd);
 
-int send_serial_bytes(UINT8 *pszData, int iLength, int uart_fd);
+int send_serial_bytes(unsigned char *pszData, int iLength, int uart_fd);
 
 unsigned char RecvUhfUartData(unsigned char *rbuf,unsigned char *rlen);
 

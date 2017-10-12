@@ -48,7 +48,7 @@ int bytes2HexString(char *src, char *des, int size)
 	return resval;
 }
 
-int receive_serial_bytes(UINT8 *pszBuffer, int iLength, int uart_fd)
+int receive_serial_bytes(unsigned char *pszBuffer, int iLength, int uart_fd)
 {
 	int iRes = 0;
 
@@ -81,7 +81,7 @@ int receive_serial_bytes(UINT8 *pszBuffer, int iLength, int uart_fd)
 	//printf("iRes= %d\n", iRes);
 }
 
-int send_serial_bytes(UINT8 *pszData, int iLength, int uart_fd)
+int send_serial_bytes(unsigned char *pszData, int iLength, int uart_fd)
 {
 	int iRes = 0;
 

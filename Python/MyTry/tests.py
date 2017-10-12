@@ -4,6 +4,8 @@ import ctypes
 
 _printer = ctypes.CDLL('./lib.so')
 _printer.printInt.argtypes = ([ctypes.c_int])
+_printer.returnIntPlusOne.argtypes = ([ctypes.c_int])
+
 _printer.printChar.argtypes = ([ctypes.c_byte])
 _printer.printFloat.argtypes = ([ctypes.c_float])
 _printer.printString.argtypes = ([ctypes.c_char_p])
@@ -14,6 +16,10 @@ _printer.printString.argtypes = ([ctypes.c_char_p])
 
 def printInt(numb):
     _printer.printInt(ctypes.c_int(numb))
+
+def incInt(inInt):
+    print('C-function returned :',
+          _printer.returnIntPlusOne(ctypes.c_int(inInt)))
 
 def printChar(ch):    
     # need to conver the python string into a byte!
