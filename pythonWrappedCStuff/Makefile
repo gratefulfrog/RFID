@@ -1,7 +1,7 @@
 #DEFS=-DTEST -DMAIN
-DEFS=-DTEST
-CC=cc
-CFLAGS=-fPIC -MD
+#DEFS=-DTEST
+CC=gcc
+CFLAGS=-fPIC -MD -std=gnu99
 LIBFLAGS=-shared -MD
 OBJ=little_test.o lib_rfid_driver.o common_uart.o
 

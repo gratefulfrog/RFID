@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 
+
 #define PORT     "/dev/ttyUSB0"
 
 int bytes2HexString(char *src, char *des, int size);

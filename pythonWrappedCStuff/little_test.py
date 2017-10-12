@@ -20,7 +20,7 @@ _rfid.doStopReadMore.argtypes = ([])
 _rfid.shutDown.argtypes = ([ctypes.c_int])
 
 def openPort():
-    return int(openPort())
+    return int(_rfid.openPort())
                
 def showFWVersion():
     _rfid.showFWVersion()
@@ -50,44 +50,44 @@ def shutDown(fd):
     _rfid.shutDown(ctypes.c_int(fd))
 
 def run():
+    GPIO.setmode(GPIO.BOARD) 
     GPIO.setup(buttonPin, GPIO.IN)
-    try:
-        uartFD = openPort()
-        sleep(0.5)
-        
-        showFWVersion()
-        sleep(0.5)
-        
-        showHWVersion()
-        sleep(0.5)
-        
-        showTxPower()
-        sleep(0.5)
-        
-        showReaderID()
-        sleep(0.5)
-        
-        showRSSI()
-        sleep(0.5)
-    
-        showTemp()
-        sleep(0.5)
-
-        while True:
-            if GPIO.input(buttonPin):
-                if showReadMore() > 0:
-                    sleep(0.5)
-                    doStopReadMore()
-                    sleep(0.5)
-    except Excpetion as e:
-        pass
-    finally:
-        shutdown(uartFD)
-
+    uartFD = openPort()
+    if (uartFD != -1):
+        try:
+            sleep(0.5)
+            
+            showFWVersion()
+            sleep(0.5)
+            
+            showHWVersion()
+            sleep(0.5)
+            
+            showTxPower()
+            sleep(0.5)
+            
+            showReaderID()
+            sleep(0.5)
+            
+            showRSSI()
+            sleep(0.5)
+            
+            showTemp()
+            sleep(0.5)
+            
+            while True:
+                if GPIO.input(buttonPin):
+                    if showReadMore() > 0:
+                        sleep(0.5)
+                        doStopReadMore()
+                        sleep(0.5)
+        except Exception as e:
+            pass
+        finally:
+            if (uartFD != -1):
+                shutDown(uartFD)
+    print('bye...')
     
 if __name__ == '__main__' :
-    import sys
-    if len(sys.argv) < 2:
-        print('usage : $ ./tests.py <args>')
-    #printStringC(sys.argv[1][0])
-    printString(sys.argv[1])
+    run()
+
