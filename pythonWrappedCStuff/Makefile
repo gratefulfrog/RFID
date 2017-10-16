@@ -1,5 +1,5 @@
 #DEFS=-DTEST -DMAIN
-DEFS=-DTEST
+#DEFS=-DTEST
 CC=gcc
 CFLAGS=-fPIC -MD -std=gnu99
 LIBFLAGS=-shared -MD
