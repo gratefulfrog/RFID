@@ -7,7 +7,7 @@ void wiringPiSetup (){
 void pinMode(int x, int y){
 }
 int digitalRead(int x){
-  return 0;
+  return 1;
 }
 #else
 #include <wiringPi.h>
@@ -28,7 +28,7 @@ void   printBytesN(unsigned char *bytes, int nbBytes){
 }
 
 int openPort(){
-  int uhf_uart_fd = uart_open(PORT, 115200, 8, 1, 'N', 0);
+  uhf_uart_fd = uart_open(PORT, 115200, 8, 1, 'N', 0);
   if(uhf_uart_fd == -1)	{
     printf("connect error result = %d\n", uhf_uart_fd);
   }
@@ -127,55 +127,40 @@ int main(){
   }
   printf("connect success!\n");
 
-  printf("Version Fw: ");
-  nbBytes = GetUm7Fw(uart_data);
-  printBytesN(uart_data,nbBytes);
+  showFWVersion();
   sleep(0.5);
 
-  printf("Version Hw: ");
-  nbBytes = GetUm7Hw(uart_data);
-  printBytesN(uart_data,nbBytes);
+  showHWVersion();
   sleep(0.5);
   
-  printf("TxPower: ");
-  nbBytes = GetTxPower(uart_data);
-  printBytesN(uart_data,nbBytes);
-  sleep(0.5);
-  
-  printf("Reader ID: ");
-  nbBytes = readerID(uart_data);
-  printBytesN(uart_data,nbBytes);
+  showTxPower();
   sleep(0.5);
 
-  
-  printf("RSSI: ");
-  nbBytes = GetUm7Rssi(uart_data);
-  printBytesN(uart_data,nbBytes);
-  sleep(0.5);
-  
-  float temp =0.0;
-  nbBytes = readerTemp(uart_data,&temp);
-  printf("temperature : %f\n",temp);
+  showReaderID();
   sleep(0.5);
 
-  while(digitalRead(7)){
+  showRSSI();
+  sleep(0.5);
+  
+  showTemp();
+  sleep(0.5);
 
-    nbBytes  = readmore(uart_data);
-    if(nbBytes){
-          printf("Tag: ");
-	  printBytesN(uart_data,nbBytes);
-	  printf("\n");
-	  sleep(0.5);
-    }
-    if (nbBytes){
-      //printf("stopReadmore: ");
-      nbBytes  = stopReadmore(uart_data);
-      //printBytesN(uart_data,nbBytes);
-      sleep(0.5);
+  while(1){
+    if(digitalRead(7)){
+      nbBytes  = readmore(uart_data);
+      if(nbBytes){
+	printf("Tag: ");
+	printBytesN(uart_data,nbBytes);
+	printf("\n");
+	sleep(0.5);
+      }
+      if (nbBytes){
+	nbBytes  = stopReadmore(uart_data);
+	sleep(0.5);
+      }
     }
   }
-
-  close(uhf_uart_fd);	
+  shutDown(uhf_uart_fd);
   return 0;
 }
 #endif

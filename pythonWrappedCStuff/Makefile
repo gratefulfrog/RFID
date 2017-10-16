@@ -1,5 +1,5 @@
 #DEFS=-DTEST -DMAIN
-#DEFS=-DTEST
+DEFS=-DTEST
 CC=gcc
 CFLAGS=-fPIC -MD -std=gnu99
 LIBFLAGS=-shared -MD
@@ -13,7 +13,7 @@ run: $(OBJ)
 	$(CC) -o $@ $? $(CFLAGS) $(DEFS)	
 
 lib.so: $(OBJ)
-	$(CC) -o $@ $? $(LIBFLAGS)
+	$(CC) -o $@ $? $(LIBFLAGS) $(CFLAGS) $(DEFS)
 
 %.o: %.c 
 	$(CC) -c -o $@ $< $(CFLAGS) $(DEFS)

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import ctypes
+
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -26,7 +27,7 @@ def showFWVersion():
     _rfid.showFWVersion()
     
 def showHWVersion():
-    _rfid.showFWVersion()
+    _rfid.showHWVersion()
 
 def showTxPower():
     _rfid.showTxPower()
@@ -81,13 +82,17 @@ def run():
                         sleep(0.5)
                         doStopReadMore()
                         sleep(0.5)
+        
         except Exception as e:
             pass
         finally:
             if (uartFD != -1):
                 shutDown(uartFD)
-    print('bye...')
+            print('\nbye...')
     
 if __name__ == '__main__' :
-    run()
+    try:
+        run()
+    except:
+        pass
 
